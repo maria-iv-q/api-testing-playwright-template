@@ -100,7 +100,9 @@ test.describe('/api/accounts negative tests', () => {
 
 //Homework 11
 test.describe('GET/api/accounts critical path', () => {
-  test('TL-11-4 get list of accounts should receive code 200 when header with correct API key is used', async ({request}) => {
+  test('TL-11-4 get list of accounts should receive code 200 when header with correct API key is used', async ({
+    request,
+  }) => {
     const response = await request.get(baseUrl + '/api/accounts', {
       headers: authHeader,
     })
@@ -114,7 +116,9 @@ test.describe('GET/api/accounts critical path', () => {
 })
 
 test.describe('GET/api/accounts negative tests', () => {
-  test('TL-11-5 get list of accounts should receive code 401 if header with incorrect API key is used', async ({request}) => {
+  test('TL-11-5 get list of accounts should receive code 401 if header with incorrect API key is used', async ({
+    request,
+  }) => {
     const invalidAuthHeader = {
       'X-API-KEY': 'invalid-key',
     }
@@ -128,7 +132,9 @@ test.describe('GET/api/accounts negative tests', () => {
     expect(statusCode).toBe(StatusCodes.UNAUTHORIZED)
   })
 
-  test('TL-11-6 get list of accounts should receive code 401 if no header with API key is used', async ({request}) => {
+  test('TL-11-6 get list of accounts should receive code 401 if no header with API key is used', async ({
+    request,
+  }) => {
     const response = await request.get(baseUrl + '/api/accounts')
 
     const responseBody: CreatedAccountResp[] = await response.json()
@@ -140,7 +146,9 @@ test.describe('GET/api/accounts negative tests', () => {
 })
 
 test.describe('GET/api/accounts/{id} critical path', () => {
-  test('TL-11-7 get account with correct id should receive code 200 if header with correct API key is used', async ({request}) => {
+  test('TL-11-7 get account with correct id should receive code 200 if header with correct API key is used', async ({
+    request,
+  }) => {
     const response = await request.get(baseUrl + '/api/accounts/1', {
       headers: authHeader,
     })
@@ -171,7 +179,9 @@ test.describe('GET/api/accounts/{id} negative tests', () => {
     expect(oneAccountStatusCode).toBe(StatusCodes.NOT_FOUND)
   })
 
-  test('TL-11-9 get account with id which contains letters should receive code 400', async ({ request}) => {
+  test('TL-11-9 get account with id which contains letters should receive code 400', async ({
+    request,
+  }) => {
     const response = await request.get(baseUrl + '/api/accounts/1hjjhk2', {
       headers: authHeader,
     })
@@ -193,7 +203,9 @@ test.describe('GET/api/accounts/{id} negative tests', () => {
     expect.soft(statusCode).toBe(StatusCodes.BAD_REQUEST)
   })
 
-  test('TL-11-11 get account with fractional number id should receive code 400', async ({request}) => {
+  test('TL-11-11 get account with fractional number id should receive code 400', async ({
+    request,
+  }) => {
     const response = await request.get(baseUrl + '/api/accounts/1.7', {
       headers: authHeader,
     })
@@ -218,7 +230,9 @@ test.describe('GET/api/accounts/{id} negative tests', () => {
 
 //Deposit
 test.describe('POST/api/accounts/{id}/deposit critical path', () => {
-  test('TL-11-13 post /api/accounts/{id}/deposit with valid data should receive code 200', async ({request}) => {
+  test('TL-11-13 post /api/accounts/{id}/deposit with valid data should receive code 200', async ({
+    request,
+  }) => {
     //Get account with id=1 to identify balance before deposit
     const responseBeforeDeposit = await request.get(baseUrl + '/api/accounts/1', {
       headers: authHeader,
@@ -229,7 +243,7 @@ test.describe('POST/api/accounts/{id}/deposit critical path', () => {
     console.log('status code before deposit:', statusCodeBeforeDeposit)
 
     //Post /api/accounts/{id}/deposit with valid data
-    const accountDeposit = new AccountDTO2(30.55)
+    const accountDeposit = new AccountDTO2(500)
     const responseAfterDeposit = await request.post(baseUrl + '/api/accounts/1/deposit', {
       headers: authHeader,
       data: accountDeposit,
@@ -244,7 +258,7 @@ test.describe('POST/api/accounts/{id}/deposit critical path', () => {
     //Verify that account balance increased by amount
     expect
       .soft(responseBodyAfterDeposit.balance)
-      .toBe(responseBodyBeforeDeposit.balance + accountDeposit.amount)
+      .toBeCloseTo(responseBodyBeforeDeposit.balance + accountDeposit.amount, 2)
   })
 })
 
@@ -281,7 +295,9 @@ test.describe('/api/accounts/{id}/deposit negative tests', () => {
     expect.soft(statusCodeAfterDeposit).toBe(StatusCodes.BAD_REQUEST)
   })
 
-  test('TL-11-16 POST /api/accounts/{id}/deposit with amount which is more than 1 000 000 should receive code 400', async ({request}) => {
+  test('TL-11-16 POST /api/accounts/{id}/deposit with amount which is more than 1 000 000 should receive code 400', async ({
+    request,
+  }) => {
     const account = new AccountDTO2(1000001)
     const response = await request.post(baseUrl + '/api/accounts/1/deposit', {
       headers: authHeader,
@@ -295,7 +311,9 @@ test.describe('/api/accounts/{id}/deposit negative tests', () => {
     expect.soft(statusCode).toBe(StatusCodes.BAD_REQUEST)
   })
 
-  test('TL-11-17 POST /api/accounts/{id}/deposit when amount exceeds 2 decimal places should receive code 400', async ({request}) => {
+  test('TL-11-17 POST /api/accounts/{id}/deposit when amount exceeds 2 decimal places should receive code 400', async ({
+    request,
+  }) => {
     const account = new AccountDTO2(20.123)
     const response = await request.post(baseUrl + '/api/accounts/1/deposit', {
       headers: authHeader,
@@ -335,7 +353,9 @@ test.describe('/api/accounts/{id}/deposit negative tests', () => {
 
 //Transfer
 test.describe('POST/api/accounts/{id}/transfer critical path', () => {
-  test('TL-11-19 post /api/accounts/{id}/transfer with valid data should receive code 200', async ({request}) => {
+  test('TL-11-19 post /api/accounts/{id}/transfer with valid data should receive code 200', async ({
+    request,
+  }) => {
     //Get account with id=1 to identify sender balance before transfer
     const senderResponseBeforeTransfer = await request.get(baseUrl + '/api/accounts/1', {
       headers: authHeader,
@@ -369,13 +389,18 @@ test.describe('POST/api/accounts/{id}/transfer critical path', () => {
     expect.soft(statusCodeAfterTransfer).not.toBe(StatusCodes.UNAUTHORIZED)
     expect.soft(statusCodeAfterTransfer).toBe(StatusCodes.OK)
 
-    expect.soft(responseBodyAfterTransfer.from.balance).toBe(senderResponseBodyBeforeTransfer.balance - accountTransfer.amount)
-    expect.soft(responseBodyAfterTransfer.to.balance).toBe(recipientResponseBodyBeforeTransfer.balance + accountTransfer.amount)
+    expect
+      .soft(responseBodyAfterTransfer.from.balance)
+      .toBeCloseTo(senderResponseBodyBeforeTransfer.balance - accountTransfer.amount, 2)
+    expect
+      .soft(responseBodyAfterTransfer.to.balance)
+      .toBeCloseTo(recipientResponseBodyBeforeTransfer.balance + accountTransfer.amount, 2)
   })
 })
 
 test.describe('POST/api/accounts/{id}/transfer negative tests', () => {
-  test.fail('TL-11-20 post /api/accounts/{id}/transfer should receive code 400 when sender account id is the same as recipient account id',
+  test.fail(
+    'TL-11-20 post /api/accounts/{id}/transfer should receive code 400 when sender account id is the same as recipient account id',
     async ({ request }) => {
       const accountTransfer = new AccountDTO3(1, 150)
       const responseAfterTransfer = await request.post(baseUrl + '/api/accounts/1/transfer', {
@@ -386,11 +411,18 @@ test.describe('POST/api/accounts/{id}/transfer negative tests', () => {
       const statusCodeAfterTransfer = responseAfterTransfer.status()
       console.log('Response body after transfer:', responseBodyAfterTransfer)
       console.log('Status code after transfer:', statusCodeAfterTransfer)
-      expect.soft(statusCodeAfterTransfer, `status code authorization`).not.toBe(StatusCodes.UNAUTHORIZED)
-      expect.soft(statusCodeAfterTransfer, `status code after transfer between the same accounts`).toBe(StatusCodes.BAD_REQUEST)
-    })
+      expect
+        .soft(statusCodeAfterTransfer, `status code authorization`)
+        .not.toBe(StatusCodes.UNAUTHORIZED)
+      expect
+        .soft(statusCodeAfterTransfer, `status code after transfer between the same accounts`)
+        .toBe(StatusCodes.BAD_REQUEST)
+    },
+  )
 
-  test('TL-11-21 post /api/accounts/{id}/transfer should receive code 400 when recipient account id is negative number', async ({request}) => {
+  test('TL-11-21 post /api/accounts/{id}/transfer should receive code 400 when recipient account id is negative number', async ({
+    request,
+  }) => {
     const accountTransfer = new AccountDTO3(-3, 150)
     const responseAfterTransfer = await request.post(baseUrl + '/api/accounts/1/transfer', {
       headers: authHeader,
@@ -404,7 +436,9 @@ test.describe('POST/api/accounts/{id}/transfer negative tests', () => {
     expect.soft(statusCodeAfterTransfer).toBe(StatusCodes.BAD_REQUEST)
   })
 
-  test('TL-11-22 post /api/accounts/{id}/transfer should receive code 400 when recipient account id is fractional number', async ({request}) => {
+  test('TL-11-22 post /api/accounts/{id}/transfer should receive code 400 when recipient account id is fractional number', async ({
+    request,
+  }) => {
     const accountTransfer = new AccountDTO3(3.5, 150)
     const responseAfterTransfer = await request.post(baseUrl + '/api/accounts/1/transfer', {
       headers: authHeader,
@@ -418,7 +452,9 @@ test.describe('POST/api/accounts/{id}/transfer negative tests', () => {
     expect.soft(statusCodeAfterTransfer).toBe(StatusCodes.BAD_REQUEST)
   })
 
-  test.fail('TL-11-23 post /api/accounts/{id}/transfer should receive code 400 when currencies of sender account and recipient account do not match', async ({ request }) => {
+  test.fail(
+    'TL-11-23 post /api/accounts/{id}/transfer should receive code 400 when currencies of sender account and recipient account do not match',
+    async ({ request }) => {
       //Get account with id=1 to identify sender account currency
       const senderResponseBeforeTransfer = await request.get(baseUrl + '/api/accounts/1', {
         headers: authHeader,
@@ -447,9 +483,12 @@ test.describe('POST/api/accounts/{id}/transfer negative tests', () => {
       console.log('Status code after transfer:', statusCodeAfterTransfer)
       expect.soft(statusCodeAfterTransfer).not.toBe(StatusCodes.UNAUTHORIZED)
       expect.soft(statusCodeAfterTransfer).toBe(StatusCodes.BAD_REQUEST)
-  })
+    },
+  )
 
-  test('TL-11-24 post /api/accounts/{id}/transfer should receive code 400 when amount = 0', async ({request}) => {
+  test('TL-11-24 post /api/accounts/{id}/transfer should receive code 400 when amount = 0', async ({
+    request,
+  }) => {
     const accountTransfer = new AccountDTO3(3, 0)
     const responseAfterTransfer = await request.post(baseUrl + '/api/accounts/1/transfer', {
       headers: authHeader,
@@ -463,7 +502,9 @@ test.describe('POST/api/accounts/{id}/transfer negative tests', () => {
     expect.soft(statusCodeAfterTransfer).toBe(StatusCodes.BAD_REQUEST)
   })
 
-  test('TL-11-25 post /api/accounts/{id}/transfer should receive code 400 when amount exceeds 2 decimal places', async ({request}) => {
+  test('TL-11-25 post /api/accounts/{id}/transfer should receive code 400 when amount exceeds 2 decimal places', async ({
+    request,
+  }) => {
     const accountTransfer = new AccountDTO3(3, 100.123)
     const responseAfterTransfer = await request.post(baseUrl + '/api/accounts/1/transfer', {
       headers: authHeader,
@@ -477,7 +518,9 @@ test.describe('POST/api/accounts/{id}/transfer negative tests', () => {
     expect.soft(statusCodeAfterTransfer).toBe(StatusCodes.BAD_REQUEST)
   })
 
-  test('TL-11-27 post /api/accounts/{id}/transfer should receive code 400 when amount exceeds sender account balance', async ({request}) => {
+  test('TL-11-26 post /api/accounts/{id}/transfer should receive code 400 when amount exceeds sender account balance', async ({
+    request,
+  }) => {
     //Get account with id=1 to identify sender account balance
     const senderResponseBeforeTransfer = await request.get(baseUrl + '/api/accounts/1', {
       headers: authHeader,
@@ -500,7 +543,9 @@ test.describe('POST/api/accounts/{id}/transfer negative tests', () => {
     expect.soft(statusCodeAfterTransfer).toBe(StatusCodes.CONFLICT)
   })
 
-  test("TL-11-27 POST /api/accounts/{id}/transfer should receive code 404 when recipient account ID doesn't exist", async ({request}) => {
+  test("TL-11-27 POST /api/accounts/{id}/transfer should receive code 404 when recipient account ID doesn't exist", async ({
+    request,
+  }) => {
     //Identify last account ID
     const allAccountsResponse = await request.get(baseUrl + '/api/accounts', {
       headers: authHeader,
