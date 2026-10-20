@@ -412,3 +412,17 @@ test.describe('POST/product/{id}', () => {
     expect(statusCode).toBe(StatusCodes.BAD_REQUEST)
   })
 })
+
+/// test.describe('/api/accounts critical path', () => {
+//   test('TL-11-1 POST /api/accounts with valid data without currency', async ({ request }) => {
+//     const account = new AccountDTO ("Test Owner")
+//     const response = await request.post(baseUrl+ '/api/accounts', {
+//     headers: authHeader,
+//       data: account
+//   })
+//     const respBody:CreatedAccountResp = await response.json()
+//     console.log(respBody)
+//     expect(response.status()).not.toBe(StatusCodes.FORBIDDEN)
+//     expect(response.status()).toBe(StatusCodes.CREATED)
+//     expect(respBody.owner).toBe(account.owner)
+// })
