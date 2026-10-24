@@ -1,4 +1,4 @@
-export class AccountDTO2 {
+export class DepositAccountDTO {
   amount: number
 
   constructor(amount: number) {

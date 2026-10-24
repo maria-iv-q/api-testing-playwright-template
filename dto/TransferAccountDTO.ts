@@ -1,4 +1,4 @@
-export class AccountDTO3 {
+export class TransferAccountDTO {
   toId: number
   amount: number
 
