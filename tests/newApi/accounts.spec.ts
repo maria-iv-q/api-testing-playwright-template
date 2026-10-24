@@ -600,7 +600,7 @@ test.describe('POST/api/accounts/{id}/transfer negative tests', () => {
     expect.soft(statusCodeAfterTransfer).toBe(StatusCodes.NOT_FOUND)
   })
   test.fail(
-    'TL-11-23 post /api/accounts/{id}/transfer should receive code 400 when currencies of sender account and recipient account do not match',
+    'TL-11-27 post /api/accounts/{id}/transfer should receive code 400 when currencies of sender account and recipient account do not match',
     async ({ request }) => {
       //Create new recipient USD account
       const usdRecipientAccount = new AccountDTO('DDF Owner', 'USD')
